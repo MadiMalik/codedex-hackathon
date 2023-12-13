@@ -2,7 +2,7 @@ import { useState } from "react"
 import { createRoot } from "react-dom/client"
 import shuffle from "lodash/shuffle"
 
-const data = [
+const allCharacters = [
   {
     name: "Santa Clause",
     truths: [
@@ -261,23 +261,23 @@ const data = [
   },
 ]
 
-const totalQuestions = 10
+const maxCharacters = 10
 
 type Option = {
   value: string,
-  isTruthy: boolean,
+  isTrue: boolean,
 }
 
-const getQuestions = () => {
-  return shuffle(data).map(character => {
-    const characterName = character.name
-    const trueOptions = shuffle(character.truths).slice(0, 2).map(truth => ({
+const getCharacters = () => {
+  return shuffle(allCharacters).map(character => {
+    const name = character.name
+    const trueOptions:Option[] = shuffle(character.truths).slice(0, 2).map(truth => ({
       value: truth,
-      isTruthy: true,
+      isTrue: true,
     }))
-    const falseOptions = shuffle(character.lies).slice(0, 1).map(lie => ({
+    const falseOptions:Option[] = shuffle(character.lies).slice(0, 1).map(lie => ({
       value: lie,
-      isTruthy: false,
+      isTrue: false,
     }))
     const options = shuffle([
       ...trueOptions,
@@ -285,10 +285,10 @@ const getQuestions = () => {
     ])
 
     return {
-      characterName,
+      name,
       options,
     }
-  }).slice(0, totalQuestions)
+  }).slice(0, maxCharacters)
 }
 
 const enum screenTypes {
@@ -299,11 +299,11 @@ const enum screenTypes {
 
 const App = () => {
   const [screen, setScreen] = useState(screenTypes.start)
-  const [questions, setQuestions] = useState(getQuestions())
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
+  const [characters, setCharacters] = useState(getCharacters())
+  const [activeCharacterIndex, setActiveCharacterIndex] = useState(0)
   const [points, setPoints] = useState(0)
 
-  const question = questions[activeQuestionIndex]
+  const character = characters[activeCharacterIndex]
 
   const startGame = () => {
     setScreen(screenTypes.game)
@@ -312,18 +312,18 @@ const App = () => {
   const restart = () => {
     setScreen(screenTypes.game)
     setPoints(0)
-    setQuestions(getQuestions())
-    setActiveQuestionIndex(0)
+    setCharacters(getCharacters())
+    setActiveCharacterIndex(0)
   }
 
   const chooseAnswer = (option:Option) => {
-    if (!option.isTruthy) {
+    if (!option.isTrue) {
       setPoints(points + 1)
     }
 
-    const newQuestionIndex = activeQuestionIndex + 1
-    if (newQuestionIndex < totalQuestions) {
-      setActiveQuestionIndex(newQuestionIndex)
+    const newCharacterIndex = activeCharacterIndex + 1
+    if (newCharacterIndex < maxCharacters) {
+      setActiveCharacterIndex(newCharacterIndex)
     } else {
       setScreen(screenTypes.results)
     }
@@ -341,8 +341,8 @@ const App = () => {
         <>
           <p>Points: {points}</p>
           <div>
-            <p>{question.characterName}</p>
-            {question.options.map(option => (
+            <p>{character.name}</p>
+            {character.options.map(option => (
               <button type="button" onClick={() => chooseAnswer(option)}>
                 <p>{option.value}</p>
               </button>
