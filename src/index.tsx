@@ -2,6 +2,10 @@ import { useState } from "react"
 import { createRoot } from "react-dom/client"
 import shuffle from "lodash/shuffle"
 
+import "./index.css"
+
+import christmasTreeImage from "./assets/christmas-tree.png"
+
 const allCharacters = [
   {
     name: "Santa Clause",
@@ -297,8 +301,116 @@ const enum screenTypes {
   results = "results",
 }
 
+const LightBulb = (
+  { on, x, y, rotation, color: colorProp } : 
+  { on:boolean, x: number, y: number, rotation: number, color: string}
+) => {
+  const color = on ? colorProp : "#444444"
+
+  return (
+    <div 
+      className="w-[30px] absolute z-30"
+      style={{
+        top: `${y}%`,
+        left: `${x}%`,
+        transform: `rotate(${rotation}deg)`,
+      }}
+    >
+      {on && (
+        <div
+          className="rounded-full w-[10px] absolute left-1/2 bottom-2 -translate-x-1/2 aspect-square bg-transparent opacity-75"
+          style={{ boxShadow: `0px 0px 30px 15px ${color}` }}
+        ></div>
+      )}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        height="100%"
+        version="1.1"
+        viewBox="0 0 744.094 744.094"
+        className="rotate-180"
+      >
+        <g
+          fillOpacity="1"
+          stroke="none"
+          strokeDasharray="none"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="1"
+          transform="translate(0 -308.268)"
+        >
+          <rect
+            width="241.952"
+            height="120.976"
+            x="216.116"
+            y="781.485"
+            fill="#c1c1c1"
+            opacity="1"
+            ry="60.488"
+            transform="rotate(-3.032)"
+          ></rect>
+          <circle
+            cx="337.093"
+            cy="604.09"
+            r="234.936"
+            fill={color}
+            opacity="1"
+            transform="rotate(-3.032)"
+          ></circle>
+          <path
+            fill="#fff"
+            d="M281.906 470.743c-39.136 36.344-10.628 130.744-48.545 93.13-37.917-37.613-38.164-98.843-.551-136.76 37.613-37.918 119.389-51.056 136.76-.55 20.492 59.575-59.056 17.612-87.664 44.18z"
+            opacity="1"
+          ></path>
+          <rect
+            width="241.952"
+            height="120.976"
+            x="212.817"
+            y="843.778"
+            fill="#c1c1c1"
+            opacity="1"
+            ry="60.488"
+            transform="rotate(-3.032)"
+          ></rect>
+          <rect
+            width="241.952"
+            height="120.976"
+            x="210.124"
+            y="894.63"
+            fill="#c1c1c1"
+            opacity="1"
+            ry="60.488"
+            transform="rotate(-3.032)"
+          ></rect>
+          <rect
+            width="208.758"
+            height="9.206"
+            x="-365.852"
+            y="1065.551"
+            fill="#797979"
+            opacity="1"
+            ry="4.603"
+            transform="matrix(1 -.00374 .6005 .79963 0 0)"
+          ></rect>
+          <rect
+            width="208.758"
+            height="9.206"
+            x="-412.567"
+            y="1143.345"
+            fill="#797979"
+            opacity="1"
+            ry="4.603"
+            transform="matrix(1 -.00374 .6005 .79963 0 0)"
+          ></rect>
+        </g>
+      </svg>
+    </div>
+  )
+}
+
 const App = () => {
   const [screen, setScreen] = useState(screenTypes.start)
+  // const [screen, setScreen] = useState(screenTypes.results)
   const [characters, setCharacters] = useState(getCharacters())
   const [activeCharacterIndex, setActiveCharacterIndex] = useState(0)
   const [points, setPoints] = useState(0)
@@ -339,11 +451,10 @@ const App = () => {
       )}
       {screen === screenTypes.game && (
         <>
-          <p>Points: {points}</p>
           <div>
             <p>{character.name}</p>
             {character.options.map(option => (
-              <button type="button" onClick={() => chooseAnswer(option)}>
+              <button type="button" onClick={() => chooseAnswer(option)} className="border border-black">
                 <p>{option.value}</p>
               </button>
             ))}
@@ -352,8 +463,41 @@ const App = () => {
       )}
       {screen === screenTypes.results && (
         <div>
-          Results: {points}
           <button type="button" onClick={() => restart()}>Restart</button>
+          <div>
+            <div className="aspect-square w-full max-w-[500px] relative inline-block">
+              {(points === 10) && (
+                <div 
+                  className="w-1 h-1 absolute z-10 bg-transparent"
+                  style={{
+                    boxShadow: "1px 1px 25px 28px gold",
+                    top: "17%",
+                    left: "48%",
+                  }}
+                ></div>
+              )}
+              <img src={christmasTreeImage} className="relative z-20" />
+              {[
+                { x: 26, y: 71, rotation: 0, color: "red" },
+                { x: 40, y: 70, rotation: 0, color: "orange" },
+                { x: 55, y: 66.5, rotation: 0, color: "lightblue" },
+                { x: 65, y: 62.5, rotation: 0, color: "gold" },
+
+                { x: 60, y: 53.5, rotation: 0, color: "lightblue" },
+                { x: 47, y: 52, rotation: 0, color: "orange" },
+                { x: 33, y: 48, rotation: 0, color: "red" },
+
+                { x: 40, y: 38, rotation: 0, color: "orange" },
+                { x: 50, y: 35.5, rotation: 0, color: "red" },
+              ].map((bulb, index) => {
+                const on = points > index
+
+                return (
+                  <LightBulb on={on} x={bulb.x} y={bulb.y} rotation={bulb.rotation} color={bulb.color} />
+                )
+              })}
+            </div>
+          </div>
         </div>
       )}
     </div>
