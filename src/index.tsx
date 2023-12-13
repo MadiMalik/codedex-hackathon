@@ -291,12 +291,30 @@ const getQuestions = () => {
   }).slice(0, totalQuestions)
 }
 
+const enum screenTypes {
+  start = "start",
+  game = "game",
+  results = "results",
+}
+
 const App = () => {
-  const [questions, setQuestion] = useState(getQuestions())
+  const [screen, setScreen] = useState(screenTypes.start)
+  const [questions, setQuestions] = useState(getQuestions())
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
   const [points, setPoints] = useState(0)
 
   const question = questions[activeQuestionIndex]
+
+  const startGame = () => {
+    setScreen(screenTypes.game)
+  }
+
+  const restart = () => {
+    setScreen(screenTypes.game)
+    setPoints(0)
+    setQuestions(getQuestions())
+    setActiveQuestionIndex(0)
+  }
 
   const chooseAnswer = (option:Option) => {
     if (!option.isTruthy) {
@@ -307,21 +325,37 @@ const App = () => {
     if (newQuestionIndex < totalQuestions) {
       setActiveQuestionIndex(newQuestionIndex)
     } else {
-      // end game
+      setScreen(screenTypes.results)
     }
   }
 
   return (
     <div>
-      <p>Points: {points}</p>
-      <div>
-        <p>{question.characterName}</p>
-        {question.options.map(option => (
-          <button type="button" onClick={() => chooseAnswer(option)}>
-            <p>{option.value}</p>
-          </button>
-        ))}
-      </div>
+      {screen === screenTypes.start && (
+        <div>
+          Intro
+          <button type="button" onClick={() => startGame()}>Start game</button>
+        </div>
+      )}
+      {screen === screenTypes.game && (
+        <>
+          <p>Points: {points}</p>
+          <div>
+            <p>{question.characterName}</p>
+            {question.options.map(option => (
+              <button type="button" onClick={() => chooseAnswer(option)}>
+                <p>{option.value}</p>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+      {screen === screenTypes.results && (
+        <div>
+          Results: {points}
+          <button type="button" onClick={() => restart()}>Restart</button>
+        </div>
+      )}
     </div>
   )
 }
