@@ -4,6 +4,7 @@ import shuffle from "lodash/shuffle"
 
 import "./index.css"
 
+import introImage from "./assets/intro.jpg"
 import christmasTreeImage from "./assets/christmas-tree.png"
 
 const allCharacters = [
@@ -427,10 +428,9 @@ const LightBulb = (
 
 const App = () => {
   const [screen, setScreen] = useState(screenTypes.start)
-  // const [screen, setScreen] = useState(screenTypes.results)
   const [characters, setCharacters] = useState(getCharacters())
   const [activeCharacterIndex, setActiveCharacterIndex] = useState(0)
-  const [points, setPoints] = useState(10)
+  const [points, setPoints] = useState(0)
 
   const character = characters[activeCharacterIndex]
 
@@ -461,9 +461,8 @@ const App = () => {
   return (
     <div>
       {screen === screenTypes.start && (
-        <div>
-          Intro
-          <button type="button" onClick={() => startGame()}>Start game</button>
+        <div className="h-screen bg-[length:227%] lg:bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${introImage})` }}>
+          <button type="button" onClick={() => startGame()} className="absolute inset-0"></button>
         </div>
       )}
       {screen === screenTypes.game && (
