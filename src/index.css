@@ -1,3 +1,9 @@
 @tailwind base;
+
+body {
+    @apply h-screen font-body;
+    background: linear-gradient(180deg, rgba(13,27,36,1) 0%, rgba(34,103,96,1) 100%);
+}
+
 @tailwind components;
 @tailwind utilities;

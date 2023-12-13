@@ -9,6 +9,7 @@ import christmasTreeImage from "./assets/christmas-tree.png"
 const allCharacters = [
   {
     name: "Santa Clause",
+    img: require("./assets/characters/santa.jpg"),
     truths: [
       "Santa Claus is often depicted as living at the North Pole.",
       "He is traditionally known to deliver gifts to children around the world on Christmas Eve.",
@@ -26,6 +27,7 @@ const allCharacters = [
   },
   {
     name: "Mrs Clause",
+    img: require("./assets/characters/mrs-clause.jpg"),
     truths: [
       "Mrs. Claus is typically portrayed as a kind and caring figure, often assisting Santa Claus in his Christmas preparations.",
       "She is commonly depicted as an elderly woman with white hair, wearing a dress that often matches Santa's suit in style and color.",
@@ -44,6 +46,7 @@ const allCharacters = [
   },
   {
     name: "Anna",
+    img: require("./assets/characters/anna.jpg"),
     truths: [
       "Anna is a princess of the fictional kingdom of Arendelle.",
       "She has a sister named Elsa, who has ice powers and becomes the Snow Queen.",
@@ -61,6 +64,7 @@ const allCharacters = [
   },
   {
     name: "Elsa",
+    img: require("./assets/characters/elsa.jpg"),
     truths: [
       "Elsa possesses magical ice powers, which allow her to create and control ice and snow.",
       "She becomes the Queen of Arendelle at the beginning of the first \"Frozen\" movie.",
@@ -78,6 +82,7 @@ const allCharacters = [
   },
   {
     name: "Olaf",
+    img: require("./assets/characters/olaf.jpg"),
     truths: [
       "Olaf is a friendly snowman brought to life by Elsa's magical powers.",
       "He loves warm hugs and dreams about experiencing summer.",
@@ -95,6 +100,7 @@ const allCharacters = [
   },
   {
     name: "Kristoff",
+    img: require("./assets/characters/kristoff.jpg"),
     truths: [
       "Kristoff is an ice harvester by trade and is quite skilled in navigating the snowy landscapes.",
       "He has a loyal reindeer companion named Sven, whom he treats as his best friend.",
@@ -112,6 +118,7 @@ const allCharacters = [
   },
   {
     name: "The Grinch",
+    img: require("./assets/characters/grinch.jpg"),
     truths: [
       "The Grinch is known for his grumpy and solitary nature, living alone in a cave on Mount Crumpit.",
       "He despises Christmas and the cheerful celebrations of the Whos in Whoville.",
@@ -129,6 +136,7 @@ const allCharacters = [
   },
   {
     name: "Jack Frost",
+    img: require("./assets/characters/jack-frost.jpg"),
     truths: [
       "Jack Frost is often depicted as a sprite-like character who personifies crisp, cold, winter weather.",
       "He is traditionally shown as a young man with icy powers, capable of creating frost and snow.",
@@ -146,6 +154,7 @@ const allCharacters = [
   },
   {
     name: "Rudolph the reindeer",
+    img: require("./assets/characters/rudolph.jpg"),
     truths: [
       "Rudolph is known for his glowing red nose, which lights up.",
       "He is a character in a story and song that describes him leading Santa Claus's sleigh on a foggy Christmas Eve.",
@@ -163,6 +172,7 @@ const allCharacters = [
   },
   {
     name: "Ebenzer Scrooge",
+    img: require("./assets/characters/scrooge.jpg"),
     truths: [
       "Ebenezer Scrooge is depicted as a miserly and cold-hearted old man at the beginning of the story.",
       "He is visited by the ghost of his former business partner, Jacob Marley, and the Ghosts of Christmas Past, Present, and Yet to Come.",
@@ -180,6 +190,7 @@ const allCharacters = [
   },
   {
     name: "Jack Skellington",
+    img: require("./assets/characters/jack-skellington.jpg"),
     truths: [
       "Jack Skellington is known as the \"Pumpkin King\" of Halloween Town.",
       "He becomes fascinated with Christmas and attempts to bring Christmas to Halloween Town.",
@@ -197,6 +208,7 @@ const allCharacters = [
   },
   {
     name: "Easter Bunny",
+    img: require("./assets/characters/easter-bunny.jpg"),
     truths: [
       "The Easter Bunny is traditionally depicted as a rabbit that delivers Easter eggs to children.",
       "This character is a symbol of fertility and new life, aligning with the themes of spring and Easter.",
@@ -214,6 +226,7 @@ const allCharacters = [
   },
   {
     name: "Sandman",
+    img: require("./assets/characters/sandman.jpg"),
     truths: [
       "In \"Rise of the Guardians\", the Sandman, also known as Sandy, communicates through sand images that he forms above his head, as he does not speak.",
       "Sandy is the Guardian of Dreams and is responsible for bringing pleasant dreams to children.",
@@ -231,6 +244,7 @@ const allCharacters = [
   },
   {
     name: "Tigger",
+    img: require("./assets/characters/tigger.jpg"),
     truths: [
       "Tigger is known for his distinctive orange and black stripes and a springy tail.",
       "He is extremely energetic and is always seen bouncing around, often chanting his signature phrase, \"The wonderful thing about Tiggers, is Tiggers are wonderful things!\"",
@@ -248,6 +262,7 @@ const allCharacters = [
   },
   {
     name: "Piglet",
+    img: require("./assets/characters/piglet.jpg"),
     truths: [
       "Piglet is a small, timid, pink pig character in the Winnie the Pooh stories.",
       "He is known for his soft-spoken, anxious, and often nervous personality.",
@@ -275,6 +290,7 @@ type Option = {
 const getCharacters = () => {
   return shuffle(allCharacters).map(character => {
     const name = character.name
+    const img = character.img
     const trueOptions:Option[] = shuffle(character.truths).slice(0, 2).map(truth => ({
       value: truth,
       isTrue: true,
@@ -290,6 +306,7 @@ const getCharacters = () => {
 
     return {
       name,
+      img,
       options,
     }
   }).slice(0, maxCharacters)
@@ -413,7 +430,7 @@ const App = () => {
   // const [screen, setScreen] = useState(screenTypes.results)
   const [characters, setCharacters] = useState(getCharacters())
   const [activeCharacterIndex, setActiveCharacterIndex] = useState(0)
-  const [points, setPoints] = useState(0)
+  const [points, setPoints] = useState(10)
 
   const character = characters[activeCharacterIndex]
 
@@ -450,22 +467,26 @@ const App = () => {
         </div>
       )}
       {screen === screenTypes.game && (
-        <>
-          <div>
-            <p>{character.name}</p>
+        <div className="h-screen flex flex-col justify-center items-center">
+          <div className="mt-6 flex flex-col items-center justify-center">
+            <img src={character.img} className="w-[200px] rounded-full border border-gray-400"/>
+            <p className="mt-3 font-heading text-32 font-bold text-[#ffffdf]">{character.name}</p>
+          </div>
+          <div className="mt-4">
             {character.options.map(option => (
-              <button type="button" onClick={() => chooseAnswer(option)} className="border border-black">
-                <p>{option.value}</p>
-              </button>
+              <div className="px-4 text-center text-[#ffffdf]">
+                <button type="button" onClick={() => chooseAnswer(option)} className="mt-3 px-4 py-2 w-full max-w-[900px] border border-[#147e61] lg:text-20 bg-[#147e61] rounded-lg">
+                  <p>{option.value}</p>
+                </button>
+              </div>
             ))}
           </div>
-        </>
+        </div>
       )}
       {screen === screenTypes.results && (
-        <div>
-          <button type="button" onClick={() => restart()}>Restart</button>
-          <div>
-            <div className="aspect-square w-full max-w-[500px] relative inline-block">
+        <div className="h-screen flex flex-col items-center justify-center">
+          <div className="flex justify-center">
+            <div className="mx-auto aspect-square w-full max-w-[350px] relative inline-block">
               {(points === 10) && (
                 <div 
                   className="w-1 h-1 absolute z-10 bg-transparent"
@@ -497,6 +518,11 @@ const App = () => {
                 )
               })}
             </div>
+          </div>
+          <div className="text-center">
+            <button type="button" onClick={() => restart()} className="mt-3 px-4 py-2 w-full max-w-[900px] border border-[#147e61] text-[#ffffdf] lg:text-20 bg-[#147e61] rounded-lg">
+              Restart
+            </button>
           </div>
         </div>
       )}

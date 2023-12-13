@@ -59,7 +59,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        'sans': ['Ubuntu', ...defaultTheme.fontFamily.sans],
+        'heading': ['Playfair Display'],
+        'body': ['Lato'],
       },
       fontSize: generateFontSize(12, 100),
       spacing: {
